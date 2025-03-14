@@ -50,7 +50,37 @@ public class Piece {
     //return a list of every square that is "controlled" by this piece. A square is controlled
     //if the piece capture into it legally.
     public ArrayList<Square> getControlledSquares(Square[][] board, Square start) {
-     return null;
+      ArrayList<Square> controlledSquares = new ArrayList<>();
+
+      int startRow = start.getRow();
+      int startCol = start.getCol();
+      
+      int[] rowDirections = {-1, -1, 1, 1};
+      int[] colDirections = {-1, 1, -1, 1};
+      
+      for (int direction = 0; direction < 4; direction++) {
+          int row = startRow;
+          int col = startCol;
+          
+          while (true) {
+              row += rowDirections[direction];
+              col += colDirections[direction];
+              
+              if (row < 0 || row >= 8 || col < 0 || col >= 8) break;
+              
+              Square square = board[row][col];
+              
+              if (square.isOccupied()) {
+                  controlledSquares.add(square);
+                  if (square.getOccupyingPiece().getColor() != this.getColor()) {
+                      break;
+                  }
+              } else {
+                  controlledSquares.add(square);
+              }
+          }
+      }
+      return controlledSquares;
     }
     
 
@@ -61,6 +91,57 @@ public class Piece {
     //please note that your piece must have some sort of logic. Just being able to move to every square on the board is not
     //going to score any points.
     public ArrayList<Square> getLegalMoves(Board b, Square start){
-    	return null;
+      ArrayList<Square> legalMoves = new ArrayList<>();
+      int startRow = start.getRow();
+      int startCol = start.getCol();
+      
+      //Up-Left Movement
+      for (int i = 1; startRow - i >= 0 && startCol - i >= 0; i++) {
+          Square sq = b.getSquareArray()[startRow - i][startCol - i];
+          if (sq.isOccupied()) {
+              if (sq.getOccupyingPiece().getColor() != this.getColor()) {
+                  legalMoves.add(sq);
+              }
+              break;
+          }
+          legalMoves.add(sq);
+      }
+      
+      //Up-Right Movement
+      for (int i = 1; startRow - i >= 0 && startCol + i < 8; i++) {
+          Square sq = b.getSquareArray()[startRow - i][startCol + i];
+          if (sq.isOccupied()) {
+              if (sq.getOccupyingPiece().getColor() != this.getColor()) {
+                  legalMoves.add(sq);
+              }
+              break;
+          }
+          legalMoves.add(sq);
+      }
+      
+      //Down-Left Movement
+      for (int i = 1; startRow + i < 8 && startCol - i >= 0; i++) {
+          Square sq = b.getSquareArray()[startRow + i][startCol - i];
+          if (sq.isOccupied()) {
+              if (sq.getOccupyingPiece().getColor() != this.getColor()) {
+                  legalMoves.add(sq);
+              }
+              break;
+          }
+          legalMoves.add(sq);
+      }
+      
+      //Down-Right Movement
+      for (int i = 1; startRow + i < 8 && startCol + i < 8; i++) {
+          Square sq = b.getSquareArray()[startRow + i][startCol + i];
+          if (sq.isOccupied()) {
+              if (sq.getOccupyingPiece().getColor() != this.getColor()) {
+                  legalMoves.add(sq);
+              }
+              break;
+          }
+          legalMoves.add(sq);
+      }
+      return legalMoves;
     }
 }

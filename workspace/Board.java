@@ -47,9 +47,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
     //used to keep track of the x/y coordinates of the mouse.
     private int currX;
     private int currY;
-    
 
-    
     public Board(GameWindow g) {
         this.g = g;
         board = new Square[8][8];
@@ -60,9 +58,18 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 
         //TO BE IMPLEMENTED FIRST
      
-      //for (.....)  
-//        	populate the board with squares here. Note that the board is composed of 64 squares alternating from 
-//        	white to black.
+        //for (.....)  
+        //populate the board with squares here. Note that the board is composed of 64 squares alternating from 
+        //white to black.
+        boolean color = true;
+        for(int i = 0; i < board.length; i++){
+            color = !color; 
+            for(int j = 0; j < board.length; j++){
+                color = !color;
+                board[i][j]= new Square(this, color, i, j);
+                this.add(board[i][j]); 
+            }
+        }
 
         initializePieces();
 
@@ -81,7 +88,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 	//it's up to you how you wish to arrange your pieces.
     private void initializePieces() {
     	
-    	board[0][0].put(new Piece(true, RESOURCES_WKING_PNG));
+    	board[0][0].put(new Piece(true, RESOURCES_WBISHOP_PNG));
 
     }
 
@@ -149,10 +156,29 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
     @Override
     public void mouseReleased(MouseEvent e) {
         Square endSquare = (Square) this.getComponentAt(new Point(e.getX(), e.getY()));
-        
-        //using currPiece
-        
-       
+    
+        if (endSquare != null) {
+            boolean validMove = false;
+            for (Square i : currPiece.getLegalMoves(this, fromMoveSquare)) {
+                if (endSquare == i) {
+                    endSquare.put(currPiece);
+                    fromMoveSquare.removePiece();
+                    whiteTurn = !whiteTurn;
+                    validMove = true;
+                    break;
+                }
+            }
+            if (!validMove) {
+                fromMoveSquare.put(currPiece);
+            }
+        } else {
+            fromMoveSquare.put(currPiece);
+        }
+        for (Square[] row : board) {
+            for (Square s : row) {
+                s.setBorder(null);
+            }
+        }
         fromMoveSquare.setDisplay(true);
         currPiece = null;
         repaint();

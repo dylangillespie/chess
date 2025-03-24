@@ -90,6 +90,8 @@ public class Piece {
     //returns an arraylist of squares which are legal to move to
     //please note that your piece must have some sort of logic. Just being able to move to every square on the board is not
     //going to score any points.
+
+    //This method gets the legal moves of a bishop, moving diagonal (up one square right one squre, down one square left one square, etc.)
     public ArrayList<Square> getLegalMoves(Board b, Square start){
       ArrayList<Square> legalMoves = new ArrayList<>();
       int startRow = start.getRow();

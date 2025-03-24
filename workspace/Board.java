@@ -88,7 +88,8 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 	//it's up to you how you wish to arrange your pieces.
     private void initializePieces() {
     	
-    	board[0][0].put(new Piece(true, RESOURCES_WBISHOP_PNG));
+    	board[7][2].put(new Piece(true, RESOURCES_WBISHOP_PNG));
+        board[0][5].put(new Piece(false, RESOURCES_BBISHOP_PNG));
 
     }
 
@@ -139,11 +140,11 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 
         if (sq.isOccupied()) {
             currPiece = sq.getOccupyingPiece();
+            if (currPiece.getColor() != whiteTurn) {
+                currPiece = null;
+                return;
+            }
             fromMoveSquare = sq;
-            if (!currPiece.getColor() && whiteTurn)
-                return;
-            if (currPiece.getColor() && !whiteTurn)
-                return;
             sq.setDisplay(false);
         }
         repaint();
@@ -156,8 +157,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
     @Override
     public void mouseReleased(MouseEvent e) {
         Square endSquare = (Square) this.getComponentAt(new Point(e.getX(), e.getY()));
-    
-        if (endSquare != null) {
+        if (currPiece != null) {
             boolean validMove = false;
             for (Square i : currPiece.getLegalMoves(this, fromMoveSquare)) {
                 if (endSquare == i) {
@@ -185,11 +185,19 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
     }
 
     @Override
+
+    //mouse dragged is called when the user is holding the piece and moving the mouse
     public void mouseDragged(MouseEvent e) {
         currX = e.getX() - 24;
         currY = e.getY() - 24;
-
-        repaint();
+    
+    // let's highligh all the squares that are legal to move to!
+        if(currPiece!= null) {
+            for(Square s: currPiece.getLegalMoves(this, fromMoveSquare)) {
+                s.setBorder(BorderFactory.createLineBorder(Color.MAGENTA));
+            }
+        }
+    repaint();
     }
 
     @Override

@@ -41,7 +41,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
     private boolean whiteTurn;
 
     //if the player is currently dragging a piece this variable contains it.
-    private Piece currPiece;
+    private Bishop currPiece;
     private Square fromMoveSquare;
     
     //used to keep track of the x/y coordinates of the mouse.
@@ -88,8 +88,8 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 	//it's up to you how you wish to arrange your pieces.
     private void initializePieces() {
     	
-    	board[7][2].put(new Piece(true, RESOURCES_WBISHOP_PNG));
-        board[0][5].put(new Piece(false, RESOURCES_BBISHOP_PNG));
+    	board[7][2].put(new Bishop(true, RESOURCES_WBISHOP_PNG));
+        board[0][5].put(new Bishop(false, RESOURCES_BBISHOP_PNG));
 
     }
 
@@ -101,11 +101,11 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
         return whiteTurn;
     }
 
-    public void setCurrPiece(Piece p) {
+    public void setCurrPiece(Bishop p) {
         this.currPiece = p;
     }
 
-    public Piece getCurrPiece() {
+    public Bishop getCurrPiece() {
         return this.currPiece;
     }
 
